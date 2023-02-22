@@ -40,7 +40,13 @@ namespace HomeWorkCs4_2
 
         public override string ToString()
         {
-
+            if (Numerator == 0) {
+                return "0";
+            }
+            if (Numerator == 1 && Denominator==1)
+            {
+                return "1";
+            }
             return $"{Numerator}/{Denominator}";
         }
         //сумма дробей
@@ -55,20 +61,75 @@ namespace HomeWorkCs4_2
         public static Fraction operator +(Fraction f1, Fraction f2) {
             return f1.AddFraction(f2);
         }
+        
         //разность дробей
+        public Fraction SubFraction(Fraction f)
+        {
+            if (Denominator == f.Denominator)
+            {
+                return new Fraction(Numerator - f.Numerator, Denominator);
+            }
+            return new Fraction(Numerator * f.Denominator - f.Numerator * Denominator, Denominator * f.Denominator);
+        }
         //переопределение оператора -
+        public static Fraction operator -(Fraction f1, Fraction f2)
+        {
+            return f1.SubFraction(f2);
+        }
         //произведение дробей
+        public Fraction MultFraction(Fraction f)
+        {
+            return new Fraction(Numerator * f.Numerator, Denominator * f.Denominator);
+        }       
         //переопределение оператора *
+        public static Fraction operator *(Fraction f1, Fraction f2)
+        {
+            return f1.MultFraction(f2);
+        }        
         //деление дробей
+        public Fraction DivFraction(Fraction f)
+        {
+            return new Fraction(Numerator * f.Denominator, Denominator * f.Numerator);
+        }
         //переопределение оператора /
+        public static Fraction operator /(Fraction f1, Fraction f2)
+        {
+            return f1.DivFraction(f2);
+        }
         //переопределение метода Equals() 
+        public override bool Equals(object obj)
+        {
+            if (obj is Fraction f) {
+                if (Numerator == f.Numerator && Denominator == f.Denominator) {
+                    return true;
+                }
+            }
+            return false;
+        }
         //переопределение метода GetHashCode() 
         public override int GetHashCode()
         {
             return ToString().GetHashCode(); 
         }
         //переопределение оператора ==
+        public static bool operator ==(Fraction f1, Fraction f2)
+        {
+            return f1.Equals(f2);
+        }
         //переопределение оператора !=
+        public static bool operator !=(Fraction f1, Fraction f2)
+        {
+            return !f1.Equals(f2);
+        }
+        //переопределение оператора true
+        public static bool operator true(Fraction f) {
+            return (f.Numerator <= f.Denominator) ? true : false;
+        }
+        //переопределение оператора false
+        public static bool operator false(Fraction f)
+        {
+            return (f.Numerator > f.Denominator) ? true : false;
+        }
         //сокращение дроби
         private void Reduction(Fraction f)
         {
@@ -104,8 +165,8 @@ namespace HomeWorkCs4_2
             }
             return new Fraction((int)(d*n), n);
         }
-        //переопределение явного преобразования double в Fraction
-        public static explicit operator Fraction(Double d) {
+        //переопределение невного преобразования double в Fraction
+        public static implicit operator Fraction(Double d) {
             return Fraction.DoubleToFractin(d);
         }
     }
